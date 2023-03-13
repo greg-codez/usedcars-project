@@ -1,0 +1,21 @@
+.formBody {
+	text-align: right;
+	width: 400px;
+	margin: 0 20px 0 20px;
+}
+
+.createFormContainer {
+	width: 100%;
+	text-align: center;
+}
+label {
+	display: block;
+	font-size: 25px;
+	margin: 10px 0 10px 0;
+}
+.formInput {
+	font-family: "Segoe UI", Arial, Helvetica, Sans Serif;
+	height: 25px;
+	vertical-align: middle;
+	margin: 0 5px 0 5px;
+}
