@@ -1,0 +1,96 @@
+
+$bar-width: 60px
+$bar-height: 8px
+$hamburger-gap: 6px
+$foreground: #333
+$background: #fff
+$hamburger-margin: 8px
+$animation-timing: 200ms ease-in-out
+$hamburger-height: calc($bar-height * 3 + $hamburger-gap * 2)
+$x-width: calc($hamburger-height * 1.41421356237)
+
+*,
+*::after,
+*::before
+    box-sizing: border-box
+
+body
+    margin: 0
+
+
+.menu-title
+    width: 15rem
+
+.hamburger-menu
+    $x-width: calc($hamburger-height * 1.41421356237)
+    display: flex
+    flex-direction: column
+    gap: 6px
+    width: max-content
+    position: absolute
+    top: $hamburger-margin
+    left: $hamburger-margin
+    z-index: 2
+    cursor: pointer
+
+.hamburger-menu:has(input:checked)
+    --foreground: #fff
+    --background: #333
+
+.hamburger-menu:has(input:checked)::after,
+.hamburger-menu:has(input:checked)::before
+    background-color: #fff
+
+.hamburger-menu:has(input:focus-visible)::before,
+.hamburger-menu:has(input:focus-visible)::after,
+.hamburger-menu input:focus-visible
+    background-color: #fff
+    border: 1px solid $background
+    box-shadow: 0 0 0 1px $foreground
+
+.hamburger-menu::before,
+.hamburger-menu::after,
+.hamburger-menu input
+    content: ""
+    width: $bar-width
+    height: $bar-height
+    background-color: $foreground
+    border-radius: 9999px
+    transform-origin: left center
+    transition: opacity $animation-timing, width $animation-timing, rotate $animation-timing, translate $animation-timing, background-color $animation-timing
+
+.hamburger-menu input
+    appearance: none
+    padding: 0
+    margin: 0
+    outline: none
+    pointer-events: none
+
+.hamburger-menu:has(input:checked)::before
+    rotate: 45deg
+    translate: 0 calc($bar-height / -2)
+    width: $x-width
+
+.hamburger-menu:has(input:checked)::after
+    rotate: -45deg
+    width: $x-width
+    translate: 0 calc($bar-height / 2)
+
+.hamburger-menu input:checked
+    opacity: 0
+    width: 0
+
+.sidebar
+    transition: translate $animation-timing
+    translate: -100%
+    padding: 0.5rem 2rem
+    //padding-top: calc($hamburger-height + $hamburger-margin + 1rem)
+    padding-left: 5rem
+    background-color: $foreground
+    color: &$background
+    max-width: 15rem
+    min-height: 100vh
+    position: absolute
+
+.hamburger-menu:has(input:checked) + .sidebar
+    translate: 0

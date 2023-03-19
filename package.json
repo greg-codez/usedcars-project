@@ -9,9 +9,11 @@
     "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --port 8080"
   },
   "dependencies": {
+    "dotenv": "^16.0.3",
+    "mongodb": "^5.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0"
@@ -21,6 +23,7 @@
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "gh-pages": "^5.0.0",
+    "sass": "^1.59.3",
     "vite": "^4.1.0"
   }
 }
