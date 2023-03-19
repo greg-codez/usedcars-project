@@ -16,6 +16,8 @@ $mediaMinWidth: 480px
         width: 100%
         height: 250px
         object-fit: cover
+        @media (max-width: $mediaMinWidth)
+            height: 100px
     &:hover
         background-color: #dae8e8
         color: #ffffff
@@ -27,7 +29,7 @@ $mediaMinWidth: 480px
     h2
         font-size: 15px
         margin-bottom: 0
-        color: #000 
+        color: #000
     p
         font-size: 15px
         margin-bottom: 5px
@@ -49,7 +51,7 @@ $mediaMinWidth: 480px
         h2
             font-size: 15px
             margin-bottom: 0
-            color: #000 
+            color: #000
         p
             font-size: 15px
             margin-bottom: 5px
@@ -58,7 +60,7 @@ $mediaMinWidth: 480px
 .car
     flex: 0 1 calc(25% - 1em)
     margin: 5px
-        
+
 .car img
     max-width: 291px
     align-self: center
@@ -112,6 +114,67 @@ $mediaMinWidth: 480px
 .modal-body
     padding: 10px 15px
     color: #000
+
+// Modal container styles
+.modal-container
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 9999
+    display: flex
+    justify-content: center
+    align-items: center
+    background-color: rgba(0, 0, 0, 0.5)
+
+.modal-content
+    position: relative
+    display: flex
+    flex-direction: row
+    justify-content: center
+    align-items: center
+    max-width: 80%
+    max-height: 80%
+    background-color: #fff
+    padding: 2rem
+    border-radius: 5px
+    color: #444
+    @media (max-width: $mediaMinWidth)
+        top: 55px
+        position: absolute
+    .picture
+        flex: 1
+        max-width: 50%
+        margin-right: 2rem
+    img
+        max-width: 100%
+    .text-wrap
+        flex: 1
+        max-width: 50%
+
+    h2
+        font-size: 2rem
+        margin-bottom: 1rem
+        @media (max-width: $mediaMinWidth)
+            font-size: 12px
+
+    p
+        font-size: 1.2rem
+        line-height: 1.5
+        @media (max-width: $mediaMinWidth)
+            font-size: 12px
+
+    // Close button styles
+    .close-btn
+        position: absolute
+        top: 1rem
+        right: 1rem
+        font-size: 2rem
+        cursor: pointer
+
+    .modal-content
+        display: none
 
 #overlay
     position: fixed
