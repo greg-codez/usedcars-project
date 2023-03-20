@@ -19,12 +19,14 @@ function CarsList({ data }) {
 return (
     <div className='carContainer'>
         <div>
-           <CarFilter data={cars} />
+           <CarFilter 
+             data = { cars } 
+           />
         </div>
         <div className="carList">
             {carsbyId.map(car => (
                 <ProductCard
-                    data = {car}
+                    data = { car }
                     />
             ))}
         </div>

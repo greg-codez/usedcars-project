@@ -1,22 +1,26 @@
 import React, { useState } from "react";
 import "./CarFilter.sass";
 
-const CarFilter = (data) => {
+const CarFilter = ( { data }  ) => {
   const [selectedMake, setSelectedMake] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   const [vehicleMakes, setVehiclesMakes] = useState([]),
-  [selectedCarId, chooseMakeView] = useState('All Makes')
-  
-  const entries = Object.entries(data)
-  console.log('display filter entries', entries)
-  console.log(typeof entries)
+  [selectedCarId, chooseMakeView] = useState('All Makes'),
+  [selectedYearCarId, chooseYearView] = useState('All Years')
   
   
-   /* Unique Car Makes for our drop down selector */
-	let uniqueCarMakes = [...new Set(entries.map(car => car.make))]
+  //const entries = Object.entries(data)
+
+  
+  
+   /* Unique Car Make, Year for our drop down selector */
+	let uniqueCarMakes = [...new Set(data.map(car => car.make))],
+  uniqueCarYears = [...new Set(data.map(car => car.year))]
 
 	/* Lets sort Car Makes alphabetically for the select drop down. */
 	uniqueCarMakes.sort((a, b) => a[0].localeCompare(b[0]))
+  //uniqueCarYears.sort((a, b) => a[0].localeCompare(b[0]))
+
 
   const handleMakeChange = (e) => {
     setSelectedMake(e.target.value);
@@ -42,48 +46,21 @@ const CarFilter = (data) => {
                       ))}
                   </select>
               </div>
-         }
-      <label htmlFor="make-select">Make:</label>
-      <select id="make-select" value={selectedMake} onChange={handleMakeChange}>
-        <option value="">Select a make</option>
-        <option value="toyota">Toyota</option>
-        <option value="honda">Honda</option>
-        <option value="nissan">Nissan</option>
-      </select>
+              }
+     {uniqueCarYears.length > 0 &&  // make sure we have data 
+          //populate drop down selection with unique sorted makes
+              <div className='selectYear'>
+                  <select name='viewMakes' value={selectedYearCarId} onChange={e => chooseYearView(e.target.value)}>
+                      <option key='999999' value={'All Years'}>Years</option>
+                      {uniqueCarYears.map(item => ( 
+                          <option key={item} {...selectedCarId === item ? 'selected' : ''} value={item}>
+                              {item}
+                          </option>
+                      ))}
+                  </select>
+              </div>
+              }
 
-      {selectedMake && (
-        <div className="model-filter">
-          <label htmlFor="model-select">Model:</label>
-          <select
-            id="model-select"
-            value={selectedModel}
-            onChange={handleModelChange}
-          >
-            <option value="">Select a model</option>
-            {selectedMake === "toyota" && (
-              <>
-                <option value="corolla">Corolla</option>
-                <option value="camry">Camry</option>
-                <option value="prius">Prius</option>
-              </>
-            )}
-            {selectedMake === "honda" && (
-              <>
-                <option value="accord">Accord</option>
-                <option value="civic">Civic</option>
-                <option value="crv">CR-V</option>
-              </>
-            )}
-            {selectedMake === "nissan" && (
-              <>
-                <option value="altima">Altima</option>
-                <option value="sentra">Sentra</option>
-                <option value="rogue">Rogue</option>
-              </>
-            )}
-          </select>
-        </div>
-      )}
     </div>
   );
 };
