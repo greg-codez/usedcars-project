@@ -1,68 +1,82 @@
-import React, { useState } from "react";
-import "./CarFilter.sass";
-
-const CarFilter = ( { data }  ) => {
-  const [selectedMake, setSelectedMake] = useState("");
-  const [selectedModel, setSelectedModel] = useState("");
-  const [vehicleMakes, setVehiclesMakes] = useState([]),
-  [selectedCarId, chooseMakeView] = useState('All Makes'),
-  [selectedYearCarId, chooseYearView] = useState('All Years')
-  
-  
-  //const entries = Object.entries(data)
-
-  
-  
-   /* Unique Car Make, Year for our drop down selector */
-	let uniqueCarMakes = [...new Set(data.map(car => car.make))],
-  uniqueCarYears = [...new Set(data.map(car => car.year))]
-
-	/* Lets sort Car Makes alphabetically for the select drop down. */
-	uniqueCarMakes.sort((a, b) => a[0].localeCompare(b[0]))
-  //uniqueCarYears.sort((a, b) => a[0].localeCompare(b[0]))
+import React, { useState, useEffect } from 'react';
 
 
-  const handleMakeChange = (e) => {
-    setSelectedMake(e.target.value);
-    setSelectedModel("");
+const CarFilter = ({ cars, onFilter }) => {
+  const [selectedMake, setSelectedMake] = useState('');
+  const [selectedModel, setSelectedModel] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+
+  const allMakes = [...new Set(cars.map(car => car.make))];
+
+  const allModels = () => {
+    if (selectedMake === '') {
+      return [...new Set(cars.map(car => car.model))];
+    } else {
+      const filteredCars = cars.filter(car => car.make === selectedMake);
+      return [...new Set(filteredCars.map(car => car.model))];
+    }
   };
 
-  const handleModelChange = (e) => {
-    setSelectedModel(e.target.value);
+  const allYears = () => {
+    if (selectedMake === '') {
+      return [...new Set(cars.map(car => car.year))];
+    } else if (selectedModel === '') {
+      const filteredCars = cars.filter(car => car.make === selectedMake);
+      return [...new Set(filteredCars.map(car => car.year))];
+    } else {
+      const filteredCars = cars.filter(car => car.make === selectedMake && car.model === selectedModel);
+      return [...new Set(filteredCars.map(car => car.year))];
+    }
   };
+
+  const handleMakeChange = event => {
+    setSelectedMake(event.target.value);
+    setSelectedModel('');
+    setSelectedYear('');
+  };
+
+  const handleModelChange = event => {
+    setSelectedModel(event.target.value);
+    setSelectedYear('');
+  };
+
+  const handleYearChange = event => {
+    setSelectedYear(event.target.value);
+  };
+
+  useEffect(() => {
+    onFilter({ make: selectedMake, model: selectedModel, year: selectedYear });
+  }, [selectedMake, selectedModel, selectedYear]);
 
   return (
-    <div className="car-filter">
-      <h2>Filter Cars</h2>
-     {uniqueCarMakes.length > 0 &&  // make sure we have data 
-          //populate drop down selection with unique sorted makes
-              <div className='selectMake'>
-                  <select name='viewMakes' value={selectedCarId} onChange={e => chooseMakeView(e.target.value)}>
-                      <option key='999999' value={'All Makes'}>All Makes</option>
-                      {uniqueCarMakes.map(item => ( 
-                          <option key={item} {...selectedCarId === item ? 'selected' : ''} value={item}>
-                              {item}
-                          </option>
-                      ))}
-                  </select>
-              </div>
-              }
-     {uniqueCarYears.length > 0 &&  // make sure we have data 
-          //populate drop down selection with unique sorted makes
-              <div className='selectYear'>
-                  <select name='viewMakes' value={selectedYearCarId} onChange={e => chooseYearView(e.target.value)}>
-                      <option key='999999' value={'All Years'}>Years</option>
-                      {uniqueCarYears.map(item => ( 
-                          <option key={item} {...selectedCarId === item ? 'selected' : ''} value={item}>
-                              {item}
-                          </option>
-                      ))}
-                  </select>
-              </div>
-              }
-
+    <div className="filter-container">
+      <select value={selectedMake} onChange={handleMakeChange}>
+        <option value="">Select Make</option>
+        {allMakes.map(make => (
+          <option key={make} value={make}>
+            {make}
+          </option>
+        ))}
+      </select>
+      <select value={selectedModel} onChange={handleModelChange} disabled={selectedMake === ''}>
+        <option value="">Select Model</option>
+        {allModels().map(model => (
+          <option key={model} value={model}>
+            {model}
+          </option>
+        ))}
+      </select>
+      <select value={selectedYear} onChange={handleYearChange} disabled={selectedMake === ''}>
+        <option value="">Select Year</option>
+        {allYears().map(year => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
+
 
 export default CarFilter;

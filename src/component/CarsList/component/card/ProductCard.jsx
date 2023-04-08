@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import './ProductCard.sass'
 
 
-const ProductCard = ({ data }) => {
+const ProductCard = ( props ) => {
+  const { data, selectedMake, selectedModel, selectedYear } = props;
   const [openModal, setOpenModal] = useState(false),
   [carContent, setModalContent] = useState()
 
