@@ -1,82 +1,62 @@
 import React, { useState, useEffect } from 'react';
+import './CarFilter.sass';
 
+function CarFilter({ selectedMake, setSelectedMake, selectedModel, setSelectedModel, selectedYear, setSelectedYear, data }) {
+  const makes = Array.from(new Set(data.map(car => car.make)));
+  const models = Array.from(new Set(data.filter(car => car.make === selectedMake).map(car => car.model)));
+  const years = Array.from(new Set(data.filter(car => car.make === selectedMake && car.model === selectedModel).map(car => car.year)));
 
-const CarFilter = ({ cars, onFilter }) => {
-  const [selectedMake, setSelectedMake] = useState('');
-  const [selectedModel, setSelectedModel] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
-
-  const allMakes = [...new Set(cars.map(car => car.make))];
-
-  const allModels = () => {
-    if (selectedMake === '') {
-      return [...new Set(cars.map(car => car.model))];
-    } else {
-      const filteredCars = cars.filter(car => car.make === selectedMake);
-      return [...new Set(filteredCars.map(car => car.model))];
-    }
-  };
-
-  const allYears = () => {
-    if (selectedMake === '') {
-      return [...new Set(cars.map(car => car.year))];
-    } else if (selectedModel === '') {
-      const filteredCars = cars.filter(car => car.make === selectedMake);
-      return [...new Set(filteredCars.map(car => car.year))];
-    } else {
-      const filteredCars = cars.filter(car => car.make === selectedMake && car.model === selectedModel);
-      return [...new Set(filteredCars.map(car => car.year))];
-    }
-  };
-
-  const handleMakeChange = event => {
+  
+  const handleMakeChange = (event) => {
     setSelectedMake(event.target.value);
     setSelectedModel('');
     setSelectedYear('');
   };
 
-  const handleModelChange = event => {
+  const handleModelChange = (event) => {
     setSelectedModel(event.target.value);
     setSelectedYear('');
+    setSelectedMake(data.filter(car => car.model === event.target.value)[0].make);
   };
 
-  const handleYearChange = event => {
+  const handleYearChange = (event) => {
     setSelectedYear(event.target.value);
   };
 
   useEffect(() => {
-    onFilter({ make: selectedMake, model: selectedModel, year: selectedYear });
-  }, [selectedMake, selectedModel, selectedYear]);
+    setSelectedMake('');
+    setSelectedModel('');
+    setSelectedYear('');
+  }, [data]);
 
   return (
-    <div className="filter-container">
+    <div className="carFilterContainer">
       <select value={selectedMake} onChange={handleMakeChange}>
-        <option value="">Select Make</option>
-        {allMakes.map(make => (
-          <option key={make} value={make}>
-            {make}
-          </option>
+        <option value="">All Makes</option>
+        {makes.map((make, index) => (
+          <option value={make} key={index}>{make}</option>
         ))}
       </select>
       <select value={selectedModel} onChange={handleModelChange} disabled={selectedMake === ''}>
-        <option value="">Select Model</option>
-        {allModels().map(model => (
-          <option key={model} value={model}>
-            {model}
-          </option>
-        ))}
+        <option value="">All Models</option>
+        {selectedMake === '' ?
+          null :
+          models.map((model, index) => (
+            <option value={model} key={index}>{model}</option>
+          ))
+        }
       </select>
-      <select value={selectedYear} onChange={handleYearChange} disabled={selectedMake === ''}>
-        <option value="">Select Year</option>
-        {allYears().map(year => (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        ))}
+      <select value={selectedYear} onChange={handleYearChange} disabled={selectedModel === ''}>
+        <option value="">All Years</option>
+        {selectedModel === '' ?
+          null :
+          years.map((year, index) => (
+            <option value={year} key={index}>{year}</option>
+          ))
+        }
       </select>
     </div>
   );
-};
-
+}
 
 export default CarFilter;
